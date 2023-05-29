@@ -1,0 +1,52 @@
+################################################################################
+# Script Name: neovim.yaml 
+# Description: ansible task to build neovim from source 
+# Author: Igor Sadza 
+# Created: 2023-05-29 
+# Last Modified: 2023-05-29 
+# Version: 1.0
+################################################################################
+
+- name: Gather system facts
+  setup:
+
+- name: NeoVim - Presence
+  ansible.builtin.command: nvim --version
+  register: check_nvim
+  changed_when: false
+  failed_when: false
+
+- name: Neovim - Building
+  block:
+
+    - name: NeoVim - get prerequisites
+      package:
+        name:
+          - ninja-build
+          - gettext
+          - cmake
+          - unzip
+          - curl
+          - git 
+          - file 
+          - dpkg-dev
+          - npm
+        state: present
+
+    - name: NeoVim - Clone source repo 
+      git:
+        repo: https://github.com/neovim/neovim.git
+        dest: /tmp/neovim 
+        version: stable
+
+    - name: NeoVim - Prepare
+      raw: |
+        cd /tmp/neovim && \
+        make CMAKE_BUILD_TYPE=RelWithDebInfo
+    
+    - name: NeoVim - Install
+      raw: |
+        cd /tmp/neovim/build && \
+        cpack -G DEB && \
+        dpkg -i nvim-linux64.deb 
+  when: check_nvim.rc != 0

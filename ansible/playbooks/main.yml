@@ -1,0 +1,82 @@
+################################################################################
+## Script Name: main.yaml 
+## Description: root file for dev-nvim instance instalation 
+## Author: Igor Sadza 
+## Created: 2023-05-29 
+## Last Modified: 2023-05-29 
+## Version: 1.0
+#################################################################################
+
+- name: Setup instance - Nvim
+  hosts: target
+
+  become:       false 
+  gather_facts: false 
+
+  pre_tasks:
+    
+    - name: Install python3 
+      import_tasks: './tasks/python3.yml'
+
+    - name: Install neovim 
+      import_tasks: './tasks/neovim.yml'
+
+  tasks:
+
+    # Lua doesen't check if plugin is installed or not 
+    # when we try to copy full configuration without
+    # installed packages we will got several errors
+    - name: Prepare 
+      block:
+        
+        - name: Packer - clone 
+          git:
+            repo: https://github.com/wbthomason/packer.nvim
+            dest: ~/.local/share/nvim/site/pack/packer/start/packer.nvim
+            depth: 1
+
+        - name: Packer - copy init-data 
+          copy:
+            src: "../files/nvim/lua/plugins.lua"
+            dest: ~/.config/nvim/lua/
+
+        - name: Packer - dummy init.lua 
+          copy:
+            dest: ~/.config/nvim/init.lua
+            content: |
+              require('plugins')
+
+        - name: Packer - sync 
+          raw: |
+            nvim --headless \
+                -c 'autocmd User PackerComplete quitall' \
+                -c 'PackerSync'
+
+    # Copy real configuration
+    - name: Copy full-configuration
+      copy:
+        src: ../files/nvim/
+        dest: ~/.config/nvim/
+
+
+    # Purge vim / vim-tiny
+    # Set alias vi ~ nvim
+    - name: post-install
+      block:
+  
+        - name: post-install - purge vim / vi
+          package:
+            name:
+              - vim
+              - vim-tiny 
+            state: absent
+
+        - name: post-install - vi as nvim
+          lineinfile:
+            path: ~/.bashrc
+            line: "alias vi=nvim"
+            insertafter: EOF
+            create: yes
+          become: yes
+          become_user: root
+    
