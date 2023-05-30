@@ -1,9 +1,8 @@
 name: 'Neovim'
 
-on:
+on: 
   push:
     branches: [ "neovim" ]
-on: 
   workflow_dispatch:
     inputs:
       ssh_host:
