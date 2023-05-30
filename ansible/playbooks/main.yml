@@ -7,7 +7,7 @@
 ## Version: 1.0
 #################################################################################
 
-- name: Setup instance - Nvim
+- name: Setup instance - neovim
   hosts: target
 
   become:       false 
