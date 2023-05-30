@@ -5,3 +5,6 @@
 [submodule "files/ansible/nvim"]
 	path = files/ansible/nvim
 	url = https://github.com/igor-sadza/nvim.git
+[submodule "ansible/files/nvim"]
+	path = ansible/files/nvim
+	url = https://github.com/igor-sadza/nvim.git
