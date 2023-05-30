@@ -1,5 +1,3 @@
-name: 'Neovim'
-
 on: 
   workflow_dispatch:
     inputs:
