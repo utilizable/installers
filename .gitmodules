@@ -1,0 +1,3 @@
+[submodule "nvim"]
+	path = ansible/files/nvim
+  url = https://github.com/igor-sadza/nvim.git 
