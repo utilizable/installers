@@ -7,14 +7,14 @@
 ## Version: 1.0
 #################################################################################
 
-- name: Install Python3
+- name: Install python3
   block:
-    - name: check presence
+    - name: python3 - check presence
       raw: test -e /usr/bin/python3
       changed_when: false
       failed_when: false
       register: check_output 
 
-    - name: install package
+    - name: python3 - install package
       raw: apt-get install -qq -y python3
       when: check_output.rc != 0
