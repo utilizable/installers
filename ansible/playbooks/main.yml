@@ -37,12 +37,12 @@
 
         - name: Packer - copy init-data 
           copy:
-            src: "../files/nvim/lua/plugins.lua"
+            src: "../files/vim/lua/plugins.lua"
             dest: ~/.config/nvim/lua/
 
         - name: Packer - dummy init.lua 
           copy:
-            dest: ~/.config/nvim/init.lua
+            dest: ~/.config/vim/init.lua
             content: |
               require('plugins')
 
@@ -55,8 +55,8 @@
     # Copy real configuration
     - name: Copy full-configuration
       copy:
-        src: ../files/nvim/
-        dest: ~/.config/nvim/
+        src: ../files/vim/
+        dest: ~/.config/vim/
 
 
     # Purge vim / vim-tiny
