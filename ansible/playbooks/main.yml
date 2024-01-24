@@ -42,7 +42,7 @@
 
         - name: Packer - dummy init.lua 
           copy:
-            dest: ~/.config/vim/init.lua
+            dest: ~/.config/nvim/init.lua
             content: |
               require('plugins')
 
@@ -56,7 +56,7 @@
     - name: Copy full-configuration
       copy:
         src: ../files/vim/
-        dest: ~/.config/vim/
+        dest: ~/.config/nvim/
 
 
     # Purge vim / vim-tiny
